@@ -29,4 +29,17 @@ public class bunnyControl : MonoBehaviour
         // jumping animation maintains until bunny lands
         // myAnimation.SetFloat("vVelocity", Mathf.Abs(myRigidbody.velocity.y));
     }
+
+    /// <summary>
+    /// Sent when an incoming collider makes contact with this object's
+    /// collider (2D physics only).
+    /// </summary>
+    /// <param name="other">The Collision2D data associated with this collision.</param>
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+    }
 }

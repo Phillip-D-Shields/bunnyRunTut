@@ -14,7 +14,7 @@ public class bunnyControl : MonoBehaviour
     public float bunnyJumpForce = 500f;
     private float bunnyHurtTime = -1;
     private float startTime;
-    
+    private int jumpsLeft = 2;
 
     //* Start is called before the first frame update
     void Start()
@@ -33,9 +33,23 @@ public class bunnyControl : MonoBehaviour
         if (bunnyHurtTime == -1)
         {
             //* bunny wants to jump
-            if (Input.GetButtonUp("Jump"))
+            if (Input.GetButtonUp("Jump") && jumpsLeft > 0)
             {
-                myRigidbody.AddForce(transform.up * bunnyJumpForce);
+
+                if (myRigidbody.velocity.y < 0)
+                {
+                    myRigidbody.velocity = Vector2.zero;
+                }
+
+                if (jumpsLeft == 1)
+                {
+                    myRigidbody.AddForce(transform.up * bunnyJumpForce * 0.75f);
+                }
+                else
+                {
+                    myRigidbody.AddForce(transform.up * bunnyJumpForce);
+                }
+                jumpsLeft--;
             }
             //* running animation starts as bunny is falling
             myAnimation.SetFloat("vVelocity", myRigidbody.velocity.y);
@@ -79,6 +93,10 @@ public class bunnyControl : MonoBehaviour
             myRigidbody.AddForce(transform.up * bunnyJumpForce);
             // * remove collision from bunny and ground
             myCollider.enabled = false;
+        }
+        else if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            jumpsLeft = 2;
         }
     }
 }
